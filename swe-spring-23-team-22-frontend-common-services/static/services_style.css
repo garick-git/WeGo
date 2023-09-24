@@ -1,0 +1,82 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: "Trebuchet MS";
+  background: #395F65;
+}
+
+.pluginContainer {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  flex: 1;
+}
+
+.pluginIcons {
+  flex: 1;
+}
+
+.button {
+  height: 65% !important;
+  width: 50% !important;
+  border-radius: 25%;
+  background-color: white;
+  color: black;
+  text-align: center;
+}
+
+.button:hover{
+  cursor: pointer;
+}
+
+.signout:hover {
+  background-color: #ff0202;
+  color: white;
+}
+
+.signout {
+  align-items: center;
+  background-color: #ffffff;
+  background-position: 0 0;
+  border-radius: 11px;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 155%;
+  list-style: outside url(https://www.smashingmagazine.com/images/bullet.svg) none;
+  padding: 2px 12px;
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  text-underline-offset: 1px;
+  transition: border .2s ease-in-out,box-shadow .2s ease-in-out;
+  transition-duration: 0.4s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  word-break: break-word;
+  position: fixed;
+  left: 1%;
+  bottom: 1%;
+}
+
+.services_title{
+  color: white;
+  font-size: larger;
+  font-family: "Trebuchet MS";
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

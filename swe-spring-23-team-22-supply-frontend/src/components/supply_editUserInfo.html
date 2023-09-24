@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" zoom = "85%">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>WeGo Edit User Information Page</title>
+        <link href="../static/settings_style.css" rel="stylesheet"  type="text/css" />
+        <link rel="icon" type="image/x-icon" href="../static/WeGoSupplyLogo.png" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+      </head>
+  <body>
+    <div class="container">
+      <i class="fa fa-arrow-circle-left" id="goBackButton"></i>
+      <center>
+        <img class="logo" src="../static/WeGoSupplyLogo.png" alt="WeGo_logo">
+        <br></br>
+        <h1 class="title">Edit User Information</h1>
+      </center>
+      <center>
+      <form class="box" id="box">
+        <div class="container">
+          <br>
+          <div id="signuptext">
+            <label for="fName" class="fName"><b>First Name:</b></label>
+            <input type="text" placeholder="Enter First Name" id="fName" name="fName" style="line-height: 20px;" required maxlength="50" pattern="[A-Za-z]+" title="Please enter your first name">
+            
+            <br></br>
+            <label for="lName" class="lName"><b>Last Name:</b></label>
+            <input type="text" placeholder="Enter Last Name" id="lName" name="lName" style="line-height: 20px;" required maxlength="50" pattern="[A-Za-z\-]+" title="Please enter your last name">
+            
+            <br></br>
+            <label for="email" class="textInForm"><b>Email:</b></label>
+            <input type="email" placeholder="Enter Email" id="email" name="email" style="line-height: 20px;" required maxlength="50" autocomplete="off" title="Email must be at least 4 characters long, and can contain letters, numbers, and @">
+    
+    
+            <br></br>
+            <label for="Username" class="textInForm"><b>Username:</b></label>
+            <input type="text" placeholder="Enter Username" style="line-height: 20px;" id="username" required pattern="[a-zA-Z0-9_]{3,20}" title="Username must be between 3 to 20 characters long, and contain only letters, numbers, and underscores">
+            
+            
+            <br></br>
+            <label for="password" class="textInForm"><b>Password:</b></label>
+            <input type="password" placeholder="Enter Password" style="line-height: 20px;" name="password" id="password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$" title="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*)">    
+            <br></br>
+    
+            <label for="confirm-password" class="textInForm"><b>Confirm Password:</b></label>
+            <input type="password" id="confirm-password" style="line-height: 20px;" placeholder="Confirm Password" name="confirm-password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$"  oninput="check(this)" title="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*)">
+            
+            <span id="message"></span>
+            <br>
+            <br>
+          </div>
+          <br>
+          <button type="submit" id="save" class="boxButton" style="border-radius: 8px; line-height: 24px;">Save</button>
+          
+      </form>
+    </center>
+  
+    <div id="success-message" style="display:none;"></div>
+    <div id="error-message" style="display:none;"></div>
+  
+  </body> 
+  <button class="signout" role=button onclick="window.location.href='/logout'">Log Out</button>
+    <script>
+      const submitButton = document.getElementById('box');
+      submitButton.addEventListener('submit', (event) => {
+        event.preventDefault();
+  
+        const fName = document.getElementById('fName').value;
+        const lName = document.getElementById('lName').value;
+
+        const email = document.getElementById('email').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          alert('Invalid email address');
+          return;
+        }
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+  
+        const userData = {
+          fName: fName,
+          lName: lName,
+          email: email,
+          username: username,
+          password: password
+        };
+          
+        fetch(`/editUserInfo`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
+        })
+
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Something Went Wrong');
+          }
+        })
+        .then(data => {
+          console.log('Success:', data);
+          alert('User Information Updated Successfully!'); // Alert the user on successful submission
+          window.location.href = '/logout';
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('There was an error Updating the User Information. Please Try Again.'); // Alert the user on error
+        });
+      });
+    </script>
+  
+    <script>
+        function check(input) {
+          if (input.value != document.getElementById('password').value) {
+          input.setCustomValidity('\nPasswords do not match');
+          document.getElementById('message').innerHTML = '\nPasswords do not match';
+        } else {
+          input.setCustomValidity('');
+          document.getElementById('message').innerHTML = '';
+        }
+      }
+    </script>
+
+  <script>
+      var goBackButton = document.getElementById('goBackButton');
+      goBackButton.addEventListener('click', goBack);
+      function goBack()
+      {
+        window.location.href = '/dashboard';
+      }
+  </script>
+</html>

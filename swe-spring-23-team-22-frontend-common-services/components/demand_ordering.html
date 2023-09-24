@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" style="zoom: 85%">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>WeGo Order Submission Page</title>
+  <link rel="icon" type="image/x-icon" href="../static/WeGoDemandSmallLogo.png">
+  <link href="../static/ordering_page_CSS.css" rel="stylesheet" type="text/css"/>
+  <!-- Map API Scripts -->
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css' rel='stylesheet' />
+  <!-- Google Places API-->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUyAsCwJf6OwhYBXAC_mOpMiHsj2dWFsk&libraries=places"></script>
+  <!-- Google Maps JavaScript library -->
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyDUyAsCwJf6OwhYBXAC_mOpMiHsj2dWFsk"></script>
+  <!-- Internal Scripts -->
+  <script src="../static/ordering_scripts.js"></script>
+  <!-- FontAwesome library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+</head>
+<body>
+
+  <header>
+    <div>
+      <img id="logo" style="margin-left: 2.9%;" src="../static/WeGoDemandSmallLogo.png" alt="Logo">
+      <h1 style="margin-left: 2%; font-size: 45px; color:#ffffff;">Place Your Order</h1>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <div class="form-wrapper">
+      <form class="box">
+        <label id="welcome-label" style="font-size: 32px;">Welcome!</label>
+        <br>
+        <br>
+        <hr>
+        <br>
+        <label for="deliver-to" style="font-size: x-large;">Shipping Address</label>
+        <br>
+        <br>
+        <div class="street">
+          <input type="text" name="street" class="form-control" id="search_input" placeholder="5180 Whiff Oaf Lane" required minlength="5" maxlength="100" pattern="[\w\s\d]+[,.#\s\w\d]*" title="Please enter a valid street address"> 
+        <br>
+        <br>
+        <hr>
+        <br>
+        <label for="vaccine-type" style="font-size: x-large;">Vaccine Type:</label>
+        <select name="vaccine-type" id="vaccine-type" onchange="calcPrice()">
+          <option value="SL" selected disabled>- Select -</option>
+          <option value="Anthrax">Anthrax</option>
+          <option value="Cholera">Cholera</option>
+          <option value="COVID">Covid-19</option>
+          <option value="Hep-A">Hepatitis A</option>
+          <option value="Hep-B">Hepatitis B</option>
+          <option value="HPV">Human Papillomavirus (HPV)</option>
+          <option value="Measles">Measles</option>
+          <option value="Mumps">Mumps</option>
+          <option value="Polio">Polio</option>
+          <option value="Rabies">Rabies</option>
+          <option value="Flu">Seasonal Influenza (Flu)</option>
+          <option value="Shingles">Shingles</option>
+          <option value="Smallpox">Smallpox</option>
+          <option value="Tetanus">Tetanus</option>
+          <option value="Tuberculosis">Tuberculosis</option>
+          <option value="Typhoid">Typhoid Fever</option>
+        </select>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" placeholder="Enter Quantity" min="0" step="1" style="width: 35%;" name="quantity" onchange="calcPrice()" required title="Please enter a quantity greater than or equal to 0">
+
+
+        <br>
+        <label for="price" style="font-size: 18px;">Total:</label>
+        <p id="total-price" style="font-size: 20px; display: inline;">$0.00</p>
+        <br>
+        <br>
+        <hr>
+        <br>
+        <div class="orderButtonDiv">
+          <button id="submit-order" type="submit" class="orderButton">Submit Order</button>
+        </div>
+      </form>
+    </div>
+    <div class="map-wrapper">
+      <div id='map'></div>
+    </div>
+
+  <button class="fa fa-cog" id="edit-user-btn"  onclick = "settings()"></button>
+  <button class="fa fa-history" id="historyButton"></button>
+
+  <!-- Script to Open the Edit User Information Page -->
+  <script>
+    var editUserInfoButton = document.getElementById('edit-user-btn');
+    editUserInfoButton.addEventListener('click', openEditInfo)
+
+   function openEditInfo()
+   {
+     window.location.href = '/editUserInfo';
+   }
+   </script>
+
+   <!-- Script to Open the Order History Page -->
+  <script>
+    var historyButton = document.getElementById('historyButton');
+   historyButton.addEventListener('click', openHistory)
+
+   function openHistory()
+   {
+     window.location.href = '/history';
+   }
+   </script>
+
+
+<button class="signout" role=button onclick="window.location.href='/logout'">Log Out</button>
+</body>
+
+
+
+<script src="../static/TrackingPage.js"></script>
+<script>
+    createMap()
+    const submitOrder = document.getElementById("submit-order")
+    submitOrder.addEventListener('click', (event) => {
+      event.preventDefault();
+      const vaccSelector = document.querySelector('#vaccine-type')
+      const suppliesNeeded = vaccSelector.options[vaccSelector.selectedIndex].value
+      const quantity = document.getElementById("quantity").value
+      const orderTotal = document.getElementById("total-price").textContent
+      const shippingAddress = document.getElementById("search_input").value
+      const destination = shippingAddress
+      const orderStatus = "In Progress"
+      const pluginType = "Vaccine Delivery"
+      const orderData = {
+        suppliesNeeded: suppliesNeeded,
+        quantity: quantity,
+        orderTotal: orderTotal,
+        destination: destination,
+        orderStatus: orderStatus,
+        pluginType: pluginType
+      }
+      fetch('/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderData)
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Something went wrong');
+        }
+      })
+      .then(data => {
+        console.log('Success:', data);
+        alert('Order created successfully!'); // Alert the user on successful submission
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error creating the order. Please try again.'); // Alert the user on error
+      });
+
+      var route = getRoute(orderData)
+      console.log(destination)
+      console.log(route)
+    })
+</script>
+
+<script>
+  var searchInput = 'search_input';
+   
+  $(document).ready(function () {
+   var autocomplete;
+   autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
+    types: ['geocode'],
+    fields: ['address_components', 'formatted_address']
+    /*componentRestrictions: {
+     country: "USA"
+    }*/
+   });
+    
+   console.log(autocomplete)
+
+   google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    event.preventDefault();
+    var near_place = autocomplete.getPlace();
+    var address_components = near_place.address_components;
+    var street = "";
+    var city = "";
+    var zipcode = "";
+    var state = "";
+    
+    for (var i = 0; i < address_components.length; i++) {
+      var component = address_components[i];
+      var componentType = component.types[0];
+
+      switch (componentType) {
+        case "street_number":
+          street = component.long_name + " " + street;
+          break;
+
+        case "route":
+          street += component.short_name;
+          break;
+
+        case "locality":
+          city = component.long_name;
+          break;
+
+        case "administrative_area_level_1":
+          state = component.short_name;
+          break;
+
+        case "postal_code":
+          zipcode = component.long_name;
+          break;
+
+        default:
+          break;
+      }
+    }
+   });
+  });
+</script>
+</html>

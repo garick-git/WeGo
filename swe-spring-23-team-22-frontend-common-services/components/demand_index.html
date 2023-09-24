@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" style="zoom: 125%">
+
+<title>WeGo Log In Page</title>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link rel="icon" type="image/x-icon" href="../static/WeGoDemandLogo.png" />
+  <link href="../static/demand_login_style.css" rel="stylesheet"  type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+</head>
+
+<body>
+  <center>
+    <img class="logo" src="../static/WeGoDemandLogo.png" alt="WeGo_logo" style="color: #ffffff">
+    <br>
+    <h1 class="title">Welcome to WeGo!</h1>
+  </center>
+ 
+  <center>
+    <form class="box" action="/login" method="POST" name="LoginForm">
+      <h1 class="titleInForm">Log In</h1>
+      <div class="container">
+        <div class="username">
+        <label for="username" class="textInForm" ><b>Username:</b></label>
+        <input type="text" placeholder=" johndoe" id="username" name="username" pattern="[a-zA-Z0-9_]{3,20}" title="Username must be between 3 to 20 characters long, and contain only letters, numbers, and underscores" required>
+      
+        <br></br>
+        </div>
+       
+        <label for="password" class="textInForm"><b>Password:</b></label>
+        <input type="password" placeholder=" *********" id="password" name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$" title="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*)" required>
+        <i class="far fa-eye" id="togglePasswordSignIn"></i>
+        
+        <br><br>
+       
+        <button type="submit" class="boxButton" id="submit-button" style="border-radius: 6px; line-height: 24px;">Log In</button>
+        <br></br>
+    
+        Don't have an account?
+        <button id="signUpPageButton" type="button">Sign Up</button>
+
+      </div>
+      
+    </form>
+  </center>
+</body>
+
+<script>// Toggle password visibility for current password
+  const togglePassword = document.querySelector('#togglePasswordSignIn');
+  const password = document.querySelector('#password');
+
+  togglePassword.addEventListener('click', function (e) 
+  {
+      
+      // toggle type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      // toggle eye slash icon
+      this.classList.toggle('fa-eye-slash');
+  });
+</script>
+
+<script>
+  // Allows sign up button to send user to sign up page
+  const button = document.getElementById('signUpPageButton');
+  button.addEventListener('click', () => {
+  window.location.href = '/signup';
+  });
+</script>
+
+
+  <script>
+    // Log in logic for front end
+      const submitButton = document.getElementById('submit-button');
+
+      submitButton.addEventListener('click', (event) => {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const loginData = {
+          username: username,
+          password: password
+        };
+
+        fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(loginData)
+        })
+        .then(response => {
+          if (response.status === 200) {
+            return response.json().then(data => {
+              if (data.message === 'Login successful') {
+                console.log('Success:', data.message);
+                alert('Logged in successfully!'); // Alert the user on successful login
+                window.location.href = '/services';
+              } else {
+                throw new Error(data.error);
+              }
+            });
+          } else {
+            throw new Error('Invalid username or password');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Invalid username or password. Please try again.'); // Alert the user on error
+        });
+      });
+
+  </script>
+
+</html>

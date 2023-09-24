@@ -1,0 +1,151 @@
+html, body{
+    height: 100%;
+    width: 100%;
+    font-family: "Trebuchet MS";
+    background: #395F65;
+  }
+  
+  .username{
+    margin-left: -1.5%;
+  }
+  
+  #signuptext{
+    display: block;
+  }
+  
+  .box
+  {
+    width:340px;
+    padding:60px;
+    left:50%;
+    background: #d9d9d9;
+    border: 7px solid #284b63;
+  }
+  
+  .title
+  {
+    color:#ffffff;
+  }
+  
+  .boxButton
+  {
+    background: #3c6e72;
+    color: #ffffff;
+    width: 30%;
+  }
+  
+  .boxButton {
+    transition-duration: 0.4s;
+  }
+  
+  .boxButton:hover {
+    background-color: green; 
+    color: white;
+    cursor: pointer;
+  }
+  
+  #fName{
+    padding: 1%;
+  }
+  
+  #lName{
+    padding: 1%;
+  }
+  
+  #email{
+    padding: 1%;
+  }
+  
+  #uname{
+    padding: 1%;
+  }
+  
+  #password{
+    padding: 1%;
+  }
+  
+  #confirm-password{
+    padding: 1%;
+  }
+  
+  .logo
+  {
+    max-width: 8%;
+    max-height: 8%;
+  }
+  
+  .orderButtonDiv
+  {
+    padding-right:50px;
+    padding-bottom: 20px;
+  }
+  
+  .box{
+    padding: 2%;
+  }
+  
+  #directLogIn:hover{
+    cursor: pointer;
+  }
+
+  
+.signOutButtonForm
+{
+  width: 10%;
+  height: 5%;
+  padding-left: 100px;  
+}
+
+.signOutButton
+{
+  background-color: #d9d9d9;
+  width: 70%;
+  height: 90%;
+}
+
+.signout:hover {
+  background-color: #ff0202;
+  color: white;
+}
+
+.signout {
+  align-items: center;
+  background-color: #ffffff;
+  background-position: 0 0;
+  border: 1px solid #ffffff;
+  border-radius: 11px;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 25px;
+  list-style: outside url(https://www.smashingmagazine.com/images/bullet.svg) none;
+  padding: 2px 12px;
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  text-underline-offset: 1px;
+  transition: border .2s ease-in-out,box-shadow .2s ease-in-out;
+  transition-duration: 0.4s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  word-break: break-word;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 12px
+}
+
+#goBackButton{
+    color: #ffffff;
+    font-size: 270%;
+  }
+  
+  #goBackButton:hover{
+    color: rgba(6, 184, 6, 0.826);
+    cursor: pointer;
+  }

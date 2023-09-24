@@ -1,0 +1,467 @@
+html, body 
+{
+  height: 100%;
+  width: 100%;
+  font-family: "Trebuchet MS";
+  background: #323030;
+}
+
+.logo
+{
+  float: left;
+  padding: 20px;
+  max-width: 8%;
+  max-height: 8%;
+}
+
+.pageTitle
+{
+  color:#ffffff;
+  padding-top: 33px;
+  font-size: 20px;
+}
+
+.settingsIcon{
+  position: absolute;
+  top: 5%;
+  right: 3%;
+  font-size: 550%;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.settingsIcon:hover {
+  color: rgba(6, 184, 6, 0.826);
+}
+
+.settings-view {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 70%;
+  background-color: #d9d9d9;
+  z-index: 999;
+  display: none; 
+  border: 7px solid #323030;
+}
+
+#settingsPopUpTitle {
+  font-size: 200%;
+  font-weight: bold;
+  margin-top: 10;
+  text-align: center;
+}
+
+.closeSettings {
+  padding: 10px;
+  cursor: pointer;
+  font-size: larger;
+  float: left;
+}
+
+.closeSettings:hover{
+  cursor: pointer;
+}
+
+.settingsFormContainer {
+  margin-top: 1%;
+  width: 80%;
+  text-align: left;
+  font-size: larger;
+  margin-right: 20%;
+  margin-left: 15%;
+}
+
+#settingsForm {
+  margin-top: 10%;
+  width: 90%;
+  font-size: larger;
+}
+
+.settingsPopUpText{
+  font-weight: lighter;  
+}
+
+.settingsInput {
+  width: 50%;
+  height: 2%;
+  padding: 1%;
+  margin-top: 2%;
+  margin-left: 2%;
+}
+
+#newPwdInput{
+  margin-left: 4%;
+}
+
+#emailInput{
+  margin-left: 13%;
+}
+
+.saveSettingsButton{
+  height: 7%;
+  width: 20%;
+  border-radius: 10%;
+  margin-top: 1%;
+  margin-left: 39%;
+}
+
+.saveSettingsButton:hover{
+  cursor: pointer;
+  background-color: rgba(5, 216, 5, 0.826);
+  color: #ffffff;
+}
+
+.inboxIcon{
+  position: absolute;
+  top: 5%;
+  right: 8%;
+  font-size: 550%;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.inboxIcon:hover {
+  color: rgba(6, 184, 6, 0.826);
+}
+
+/* VEHICLES TABLE STUFF */
+.tableTitle{
+  position: absolute;
+  color: black;
+  font-size: larger;
+  margin-bottom: 0.2%;
+  top: 20%;
+  margin-left: 12%;
+  padding: 0.5%;
+  background-color: #d9d9d9;
+}
+
+.vehiclesTableContainer{
+  height: 390px;
+  position: absolute;
+  top: 20%;
+  left: 5%;
+  width:39%;
+  margin-top: 5%;
+  margin-right: 53%;
+  overflow-x: auto;
+  background-color: #d9d9d9;
+}
+
+.vehiclesTable{
+  width: 30%;
+  padding: 1%;
+  height: 150px;
+}
+
+.rowClass {
+  background-color: #a4a3a3;
+  font-weight: 900;
+  padding: 3%;
+  width: 15%;
+  position: relative;
+  border: 3px solid #000000; 
+}
+
+.rowClass.nullFleet {
+  background-color: rgb(55, 54, 54);
+  color: #999797;
+}
+
+.rowClass:hover {
+  background-color: #7e7b7b;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.rowClass.nullFleet:hover {
+  background-color: #4d4b4b;
+  color: #ffffff;
+}
+
+#statusColumn {
+  padding: 0;
+  width: 0.6%;
+}
+
+.statusDot {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid black;
+  border-radius: 50%;
+  display: block;
+  margin: 30%
+}
+
+.blueStatusDot{
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid white;
+  border-radius: 50%;
+  display: block;
+  margin: 30%
+}
+
+/* END OF VEHICLES TABLE */
+
+/* START OF INBOX STUFF */
+#inboxTable {
+  margin-top: 1%;
+  width: 90%;
+  text-align: left;
+  font-size: larger;
+  margin-left: 4%;
+}
+
+#inboxPopUpText {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.inboxRowClass{
+  background-color: #c1bebe;
+  height: 50px;
+  width: 200px;
+  border: 5px solid #000000;
+  white-space: nowrap;
+  text-align:left;
+}
+
+#acknowledgeBtn:hover{
+  cursor: pointer;
+  background-color: rgb(12, 216, 12);
+}
+
+.popup-view {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 47%;
+  background-color: #d9d9d9;
+  z-index: 999;
+  box-sizing: border-box;
+  display: none;
+  border: 7px solid #323030;
+}
+
+.closePopUp{
+  cursor: pointer;
+  padding: 1%;
+}
+
+#vehicleDetails{
+  text-align: center;
+  font-size: 200%;
+  font-weight: bolder;
+}
+
+.popUpTable {
+  padding-top: 5%;
+  width: 100%;
+}
+
+.tableBody:hover{
+  cursor: pointer;
+}
+
+#detailsPopUpText{
+  font-weight: 900;
+  font-size: 130%;
+}
+
+#data-vehicle-fleet {
+  width: 39%;
+  font-size: large;
+  padding: 1%;
+  border-radius: 4px;
+  margin-left: 19%;
+}
+
+.popUpRow {
+  justify-content: space-between;
+  padding-top:1%;
+  padding-left: 10%;
+  padding-bottom: 12%;
+}
+
+#inboxView{
+  padding-top: 2%;
+}
+
+#inboxPopUpTitle{
+  font-weight: bolder;
+  text-align: center;
+  font-size: xx-large;
+  padding-top: 3%;
+  padding-bottom: 0%;
+}
+
+#inboxPopUpText{
+  padding-left: 5%;
+  font-size: larger;
+}
+
+.closeInbox {
+  padding: 10px;
+  cursor: pointer;
+  font-size: larger;
+  float: left;
+}
+
+.closeInbox:hover{
+  cursor: pointer;
+}
+/* END OF INBOX */
+
+.container_editDetails{
+  padding: 0%;
+}
+.btn_saveDetails{
+  width: 60px;
+  height: 30px;
+  cursor: pointer;
+  float: right;
+  margin-right: 5%;
+}
+
+.btn_saveDetails:hover{
+  background-color: rgb(12, 216, 12);
+  color: #ffffff;
+}
+
+.btn_cancelDetails{
+  width: 60px;
+  height: 30px;
+  cursor: pointer;
+  float: left;
+  margin-left: 5%;
+  padding-right: 2%;
+  
+}
+
+.btn_cancelDetails:hover{
+  background-color: rgb(233, 29, 29);
+  color: #ffffff;
+}
+
+.inbox-view {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 700px;
+  background-color: #d9d9d9;
+  z-index: 999;
+  display: none;
+  border: 7px solid #323030;
+}
+
+.titleInPopUp{
+  text-align: center;
+  font-size: 205%;
+  font-weight: 700;
+}
+
+.textInPopUp{
+  font-size: 150%;
+  font-weight: 400;
+  padding-left: 5%;
+}
+
+.registerButtonContainer{
+  padding-left: 20%;
+  padding-top: 1%;
+}
+
+.btn_registerVContent{
+  background-color: #ffffff;
+  background-position: 0 0;
+  border: 1px solid #ffffff;
+  border-radius: 11px;
+  color: #000000;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 2px;
+  list-style: outside url(https://www.smashingmagazine.com/images/bullet.svg) none;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  text-underline-offset: 1px;
+  transition: border .2s ease-in-out, box-shadow .2s ease-in-out;
+  transition-duration: 0.4s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  word-break: break-word;
+  position: absolute;
+  height: 35px;
+  width: 138px;
+}
+
+.btn_registerVContent:hover {
+  background-color: rgba(6, 184, 6, 0.826);
+  color: white;
+}
+
+.signout:hover{
+  background-color: #ff0202;
+  color: white;
+}
+
+.signout  {
+  align-items: center;
+  background-color: #ffffff;
+  background-position: 0 0;
+  border: 1px solid #ffffff;
+  border-radius: 11px;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 25px;
+  list-style: outside url(https://www.smashingmagazine.com/images/bullet.svg) none;
+  padding: 2px 12px;
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  text-underline-offset: 1px;
+  transition: border .2s ease-in-out,box-shadow .2s ease-in-out;
+  transition-duration: 0.4s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  word-break: break-word;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 12px
+}
+
+/* Add styling for the map image */
+#map {
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+}
+
+.map-wrapper{
+  width: 50%;
+  height: 80%;
+  position:absolute;
+  top:60%;
+  right: 1%;
+  transform: translateY(-50%);
+  border: 7px solid #c1bebe;
+  border-radius: 10px;
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" style="zoom: 90%">
+
+<title>WeGo Sign up Page</title>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" type="image/x-icon" href="../static/WeGoDemandLogo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link href="../static/demand_signup_style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <center>
+    <img class="logo" src="../static/WeGoDemandLogo.png" alt="WeGo_logo">
+    <br></br>
+    <h1 class="title">Welcome to WeGo!</h1>
+  </center>
+  <br>
+
+    <form class="box" id="box">
+      <h1 class="titleInForm">Sign up</h1>
+      <div class="container">
+
+        <div class = 'firstNameCont'>
+          <label for="fName" class="fName"><b>First Name:</b></label>
+          <input class = "textInput" type="text" placeholder="Enter First Name" id="fName" name="fName" required>
+        </div>
+
+        <div class ="lastNameCont">
+          <label for="lName" class="lName"><b>Last Name:</b></label>
+          <input class = "textInput" type="text" placeholder="Enter Last Name" id="lName" name="lName" required>
+        </div>
+
+        <div class = "emailCont">
+          <label for="email" class="textInForm"><b>Email:</b></label>
+          <input class = "textInput" type="email" placeholder="Enter Email" id="email" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Email must be at least 4 characters long, and must contain letters, numbers, and @" required>
+        </div>
+
+        <div class = 'usernameCont'>
+          <label for="Username" class="textInForm"><b>Username:</b></label>
+          <input class = "textInput" type="text" placeholder="Enter Username" id="username" required pattern="[a-zA-Z0-9_]{3,20}" title="Username must be between 3 to 20 characters long, and contain only letters, numbers, and underscores" name="username" required>
+        </div>
+
+        <div class = "passwordCont">
+          <label for="password" class="textInForm"><b>Password:</b></label>
+          <input class = "textInput" type="password" placeholder="Enter Password" name="password" id="password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$" title="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*)" required>
+          <i class="far fa-eye" id="togglePasswordSignUp"></i>
+        </div>
+
+        <div class = "confirmPwdCont">
+          <label for="confirm-password" class="textInForm"><b>Confirm Password:</b></label>
+          <input class = "textInput" type="password" id="confirm-password" placeholder="Confirm Password" name="confirm-password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$" title="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one special character (!@#$%^&*)" required>
+          <i class="far fa-eye" id="togglePasswordSignUp2"></i>
+        </div>
+
+        <button type="submit" id="signUp" class="boxButton">Sign Up</button>
+        <br>
+        <br>
+        <label class="textUnderButton">Already have an account?</label>
+        <button id="directLogIn">Log In</button>
+    </form>
+
+  <div id="success-message" style="display:none;"></div>
+  <div id="error-message" style="display:none;"></div>
+
+</body>
+
+<script>
+  const togglePassword = document.querySelector('#togglePasswordSignUp');
+  const password = document.querySelector('#password');
+
+  togglePassword.addEventListener('click', function (e) 
+  {
+      // toggle type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      // toggle eye slash icon
+      this.classList.toggle('fa-eye-slash');
+  });
+
+  const togglePassword2 = document.querySelector('#togglePasswordSignUp2');
+  const password2 = document.querySelector('#confirm-password');
+
+  togglePassword2.addEventListener('click', function (e) 
+  {
+      // toggle type attribute
+      const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+      password2.setAttribute('type', type);
+      // toggle eye slash icon
+      this.classList.toggle('fa-eye-slash');
+  });
+</script>
+
+  <script>
+    const button = document.getElementById('directLogIn');
+    button.addEventListener('click', () => {
+      window.location.href = '/login';
+    });
+  </script>
+
+  <script>
+    const submitButton = document.getElementById('box');
+    submitButton.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const fName = document.getElementById('fName').value;
+      const lName = document.getElementById('lName').value;
+
+      // Validate Email Input
+      const email = document.getElementById('email').value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Invalid email address');
+        return;
+      }
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match!');
+        document.getElementById('fName').value = '';
+        document.getElementById('lName').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('confirmPassword').value = '';
+        return;
+      }
+
+      const userData = {
+        fName: fName,
+        lName: lName,
+        email: email,
+        username: username,
+        password: password
+      };
+
+      fetch('/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Something went wrong');
+        }
+      })
+      .then(data => {
+        console.log('Success:', data);
+        alert('User created successfully!'); // Alert the user on successful submission
+        window.location.href = '/';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error creating the user. Please try again.'); // Alert the user on error
+      });
+    });
+  </script>
+</html>

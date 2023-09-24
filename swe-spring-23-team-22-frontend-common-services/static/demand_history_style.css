@@ -1,0 +1,115 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: "Trebuchet MS";
+  background: #395F65;
+}
+
+.title {
+  color: #ffffff;
+}
+
+#goBackButton {
+  color: #ffffff;
+  font-size: 270%;
+}
+
+#goBackButton:hover {
+  color: rgba(6, 184, 6, 0.826);
+  cursor: pointer;
+}
+
+.historyTableContainer {
+  font-size: 100%;
+}
+
+#historyTable {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+
+#historyTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #000000;
+    width: 14.28%;
+   
+}
+
+#historyTable th,
+#historyTable td {
+  text-align: center;
+  padding: 1%;
+  border-bottom: 3px solid #000000;
+}
+
+#historyTable tr {
+  background-color: #d9d9d9;
+}
+
+#historyTable tr:hover {
+  background-color: #f5f5f5;
+}
+
+.rowClass {
+  cursor: pointer;
+}
+
+
+.signOutButtonForm
+{
+  width: 10%;
+  height: 5%;
+  padding-left: 100px;  
+}
+
+.signOutButton
+{
+  background-color: #d9d9d9;
+  width: 70%;
+  height: 90%;
+}
+
+.signout:hover {
+  background-color: #ff0202;
+  color: white;
+}
+
+.signout {
+  align-items: center;
+  background-color: #ffffff;
+  background-position: 0 0;
+  border: 1px solid #ffffff;
+  border-radius: 11px;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 25px;
+  list-style: outside url(https://www.smashingmagazine.com/images/bullet.svg) none;
+  padding: 2px 12px;
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  text-underline-offset: 1px;
+  transition: border .2s ease-in-out,box-shadow .2s ease-in-out;
+  transition-duration: 0.4s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  word-break: break-word;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 12px
+}
+
+.logo
+{
+  max-width: 8%;
+  max-height: 8%;
+}

@@ -1,0 +1,12 @@
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Deploy to production
+          deployment: production
+          script:
+            - apt-get update && apt-get -y install git sshpass
+            - git config --global credential.helper cache
+            - git remote set-url origin https://pgarcia652:ATBBV28bdGTkFZ6XZgEMmq9zhb9355F6F291@bitbucket.org/pgarcia652/frontend-common-services.git
+            - sshpass -p $SUDO_PASSWORD_PG ssh -o StrictHostKeyChecking=no paulg@64.225.4.146 "cd /home/team22/repos/frontend-common-services && git pull https://pgarcia652:ATBBV28bdGTkFZ6XZgEMmq9zhb9355F6F291@bitbucket.org/swe-spring-23-team-22/frontend-common-services.git"
+            - echo $SUDO_PASSWORD_PG | sshpass -p $SUDO_PASSWORD_PG ssh -t paulg@64.225.4.146 "sudo -S systemctl restart backend-common-services.service"

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html style="zoom: 100%">
+<html lang="en">
+
+<title>Fleet Manager Log In Page</title>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" type="image/x-icon" href="../static/WeGoSupplyLogo.png" />
+  <link href="../static/supply_login_style.css" rel="stylesheet"  type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+</head>
+<br>
+
+<body>
+    <center>
+      <img class="logo" src="../static/WeGoSupplyLogo.png" alt="WeGo_logo">
+      <h1 class="title">Welcome, Fleet Manager</h1>
+    </center>
+    <center>
+      <form class="box" action="/login" method="POST" name="LoginForm">
+        <h1 class="textInForm">Log In</h1>
+        <div class="container">
+          <br>
+  
+          <div class="username">
+            <label for="username" class="textInForm" ><b>Username:</b></label>
+            <input type="text" class = "textInput" placeholder=" johndoe" id="username" name="username">
+            <br></br>
+          </div>
+         
+          <div class ="password">
+            <label for="password" class="textInForm"><b>Password:</b></label>
+            <input type="password" class = "textInput" placeholder=" *********" id="password" name="password">
+            <i class="far fa-eye" id="togglePasswordSignIn"></i>
+          </div>
+          <br></br>
+          <button type="submit" class="boxButton" id="loginButton" style="border-radius: 6px; line-height: 24px;">Log In</button>
+          <br></br>
+      
+          Don't have an account?
+          <button id="signUpPageButton" type="button" style="border-radius: 6px; line-height: 18px;">Sign Up</button>
+        </div>
+      </form>
+    </center>
+  </body>
+  
+  <script>
+    function forgotPassword()
+    {
+      
+    }
+  </script>
+  <script>// Toggle password visibility for current password
+    const togglePassword = document.querySelector('#togglePasswordSignIn');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) 
+    {
+        // toggle type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
+  </script>
+
+  <script>
+    // Allows sign up button to send user to sign up page
+    const btn_signup = document.getElementById('signUpPageButton');
+    btn_signup.addEventListener('click', () => {
+    window.location.href = '/signup';
+    });
+  </script>
+  
+    <script>
+      // Log in logic for front end
+        const submitButton = document.getElementById('loginButton');
+  
+        submitButton.addEventListener('click', (event) => {
+          event.preventDefault();
+  
+          const username = document.getElementById('username').value;
+          const password = document.getElementById('password').value;
+  
+          const loginData = {
+            username: username,
+            password: password
+          };
+  
+          fetch('/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loginData)
+          })
+          .then(response => {
+            if (response.status === 200) {
+              return response.json().then(data => {
+                if (data.message === 'Login successful') {
+                  console.log('Success:', data.message);
+                  alert('Logged in successfully!'); // Alert the user on successful login
+                  window.location.href = '/dashboard';
+                } else {
+                  throw new Error(data.error);
+                }
+              });
+            } else {
+              throw new Error('Invalid username or password');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('Invalid username or password. Please try again.'); // Alert the user on error
+          });
+        });
+  
+    </script>
+    <script>
+      function showPassword() 
+      {
+        var x = document.getElementById("password");
+        if (x.type === "password") 
+        {
+          x.type = "text";
+        } 
+        else 
+        {
+          x.type = "password";
+        }
+      }
+    </script>
+    
+    </html>

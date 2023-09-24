@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Fleet Manager - Dashboard</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/x-icon" href="../static/WeGoSupplySmallLogo.png">
+    <link href="../static/supply_dashboard.css" rel="stylesheet" type="text/css" />
+    <!--Logo and page title-->
+    <div class = "logoAndTitle">
+        <img class="logo" src="../static/WeGoSupplySmallLogo.png" alt="WeGo_logo">
+        <div class = 'pageTitle'>
+            <h1 class="title">Welcome, Fleet Manager</h1>
+        </div>
+        <span class="inboxIcon" onclick="inbox_appear()">
+            &#9993;
+        </span>
+        <span class="settingsIcon" onclick = "settings()">
+            &#9881;
+        </span>
+    </div>
+    <!-- Map API Scripts -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css' rel='stylesheet'/>
+
+    <!-- Internal Scripts -->
+    <script src="../static/ordering_scripts.js"></script> 
+</head>
+<body>
+    <!-- Details pop up window -->
+    <div id="popupView" class="popup-view">
+        <!-- Content for the popup view goes here -->
+        <div class ="closePopUp" onclick="popup_disappear()">&#10006;</div>
+        <div class ="container_editDetails">
+        </div>
+        <h3 id = "vehicleDetails">Vehicle Details</h3>
+        <div class="popUpTable">
+            <div class="popUpRow">
+                <label for="fleet" id="detailsPopUpText">Fleet:</label>
+                <select id="data-vehicle-fleet" name="fleet">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="Unregistered">Unregistered Vehicle</option>"
+                </select>
+            </div>
+            <div class="container_editDetails">
+                <button class="btn_saveDetails">Save</button>
+                <button class="btn_cancelDetails">Cancel</button>
+            </div>
+        </div>                   
+    </div>
+    
+    <!-- Inbox pop up window -->
+    <div id="inboxView" class="inbox-view">
+        <!-- Content for the inbox view goes here -->
+        <div class="closeInbox" onclick="inbox_disappear()">&#10006;</div>
+        <p id="inboxPopUpTitle">Inbox</p>
+        <p id="inboxPopUpText">No new alerts</p>
+        <div class="inboxContainer">
+        <table id="inboxTable">
+            <tbody id="inboxBody">
+    
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+
+    <!--Vehicles table, go to /populateVehicles on refresh-->
+    <span class = "tableTitle">Available Vehicles</span> 
+    <div class="vehiclesTableContainer">
+        <table id="vehiclesTable">
+            <tbody id = 'tableBody'>
+
+            </tbody>
+        </table>           
+    </div>
+
+    <script>
+        let vehicles = [];
+        let selectedVehicleId = null;
+        window.onload = function()
+        {
+            // // Local array of vehicle objects
+            // var localVehicles = [
+            // {
+            //     _id: "5",
+            //     vehicleMakeModel: "Sedan",
+            //     currOrder : null,
+            //     status : 3,
+            //     currLocation : (-92.12323, 54.23123),
+            //     fleetName : null,
+            //     inventory : null
+            // },
+            // {
+            //     _id: "6",
+            //     vehicleMakeModel: "Sedan",
+            //     currOrder : null,
+            //     status : 1,
+            //     currLocation : (-92.12323, 54.23123),
+            //     fleetName : null,
+            //     inventory : null
+            // },
+            // {
+            //     _id: "7",
+            //     vehicleMakeModel: "Sedan",
+            //     currOrder : null,
+            //     status : 3,
+            //     currLocation : (-92.12323, 54.23123),
+            //     fleetName : "A",
+            //     inventory : null
+            // }
+            // ];
+            populateVehiclesTable();
+            // populateVehiclesTableLocal(localVehicles); // LOCAL ONLY - COMMENT OUT BEFORE PUSH
+            populateInboxTable();
+            // populateInboxTableLocal(localVehicles) // LOCAL ONLY - COMMENT OUT BEFORE PUSH
+        }
+        
+        function populateVehiclesTable() {
+        // Create a new XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Set up the event handler for the response
+        xhr.onreadystatechange = function () {
+            // Check if the request is done and if it was successful
+            if (xhr.readyState === 4 && xhr.status === 200) {
+            // Parse the JSON response
+            var data = JSON.parse(xhr.responseText);
+
+            // Filter out the vehicles with null fleetName and sort the vehicles with fleetName alphabetically
+            var vehiclesWithoutFleetName = data.filter(vehicle => vehicle.fleetName === null);
+            var vehiclesWithFleetName = data.filter(vehicle => vehicle.fleetName !== null).sort((a, b) => a.fleetName.localeCompare(b.fleetName));
+
+            // Concatenate the filtered and sorted arrays
+            vehicles = vehiclesWithFleetName.concat(vehiclesWithoutFleetName);
+            vehiclesTable.innerHTML = '';
+
+            // Populate the table rows with the vehicles
+            for (var i = 0; i < vehicles.length; i++) 
+            {
+                var rowClass = vehicles[i].fleetName === null ? "rowClass nullFleet" : "rowClass";
+                var fleetName = vehicles[i].fleetName === null ? "Unregistered" : vehicles[i].fleetName;
+                var statusDotClass = "";
+                var statusDotColor = "";
+                
+                // Determine the status dot color based on the vehicle's status
+                switch(vehicles[i].status) {
+                    case 1:
+                    statusDotClass = "statusDot green";
+                    statusDotColor = "#51F205";
+                    break;
+                    case 2:
+                    statusDotClass = "blueStatusDot";
+                    statusDotColor = "#0500FF";
+                    break;
+                    case 3:
+                    statusDotClass = "statusDot red";
+                    statusDotColor = "#FF0000";
+                    break;
+                    case 4:
+                    statusDotClass = "statusDot black";
+                    statusDotColor = "#000000";
+                    break;
+                }
+                
+                var row = `<tr data-vehicle-id="${vehicles[i]._id}" onclick="handleRowClick(event); popup_vehicleDetails('${fleetName}')">
+                            <td class="${rowClass}">${fleetName} - Vehicle ${vehicles[i]._id}</td>
+                            <td id = "statusColumn"><span id = "statusDotContainer" class="${statusDotClass}" style="background-color: ${statusDotColor};"></span></td>
+                            </tr>`;
+                vehiclesTable.innerHTML += row;
+                }
+            }
+        };
+
+        // Open the request and send it
+        xhr.open("GET", "/populateVehicles", true);
+        xhr.send();
+        }
+
+        // Call the function initially
+        //populateVehiclesTable();
+
+        // Poll the endpoint every second (1000 milliseconds)
+        setInterval(populateVehiclesTable, 1000);
+
+        var submitDetailsButton = document.querySelector('.btn_saveDetails');
+        submitDetailsButton.addEventListener('click', saveVehicleDetails);
+
+        var cancelDetailsButton = document.querySelector('.btn_cancelDetails');
+        cancelDetailsButton.addEventListener('click', popup_disappear);
+
+        function handleRowClick(event) {
+            var row = event.currentTarget;
+            selectedVehicleId = row.dataset.vehicleId;
+            console.log("selected vehicle id: " + selectedVehicleId);
+        }
+
+        function saveVehicleDetails() 
+        {
+            // Get the new fleet name from the input field
+            var newFleetName = document.getElementById("data-vehicle-fleet").value;
+
+            // Find the vehicle with the selected id and modify its fleet name
+            console.log("vehicle selected: " + selectedVehicleId);
+            var vehicle = vehicles.find(v => v._id == selectedVehicleId);
+
+            // Unregister a vehicle
+            if(newFleetName == "Unregistered" || newFleetName == null)
+            {
+                // Unregister a vehicle with an emergency
+                if(vehicle.status == 3)
+                {
+                    vehicle.fleetName = null;
+                    vehicle.status = 3;
+                    console.log("fleetName is now null! Status is 3")
+                }
+                else
+                {
+                    vehicle.fleetName = null;
+                    vehicle.status = 4;
+                    console.log("status is now 4, fleetName is now null")
+                }
+                popup_disappear();
+            }
+
+            // Register a vehicle/change fleet from non-null to non-null
+            else if(newFleetName != "Unregistered" || newFleetName != null)
+            {
+                // Change fleet for a vehicle with an emergency
+                if(vehicle.status == 3)
+                {
+                    vehicle.fleetName = newFleetName;
+                    vehicle.status = 3;
+                    console.log("fleetName is now: " + newFleetName);
+                    console.log("status is: " + vehicle.status);
+                }
+                else
+                {
+                    vehicle.fleetName = newFleetName;
+                    vehicle.status = 1;
+                    console.log("fleetName is now : " + newFleetName)
+                }
+                popup_disappear();
+            }
+
+            // Send a PUT request to /editVehicle with the updated vehicle data
+            console.log("it is sending vehicle: " + vehicle._id);
+            console.log("fleetName: " + vehicle.fleetName);
+            console.log("status: " + vehicle.status);
+            fetch(`/editVehicle`, 
+            {
+                method: "PUT",
+                headers: 
+                {
+                    "Content-Type": "application/json"
+                },      
+                body: JSON.stringify(vehicle)
+            })
+
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => console.error(error));
+        }
+
+        function popup_vehicleDetails(currentValue)
+        {
+            // Show the popup view
+            var popupView = document.getElementById('popupView');
+            popupView.style.display = 'block';
+            var select = document.getElementById('data-vehicle-fleet');
+            for (var i = 0; i < select.options.length; i++) {
+                if (select.options[i].value === currentValue) {
+                    select.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+
+        function popup_disappear()
+        {
+            // Hide the popup view
+            var popupView = document.getElementById('popupView');
+            popupView.style.display = 'none';
+        }
+
+        function populateInboxTable() 
+        {
+            const inboxTable = document.getElementById("inboxTable");
+            const inboxPopUpText = document.getElementById("inboxPopUpText");
+
+            // Create a new XMLHttpRequest object
+            var xhr2 = new XMLHttpRequest();
+
+            // Set up the event handler for the response
+            xhr2.onreadystatechange = function () {
+                // Check if the request is done and if it was successful
+                if (xhr2.readyState === 4 && xhr2.status === 200) {
+                // Parse the JSON response
+                var data = JSON.parse(xhr2.responseText);
+
+                inboxTable.innerHTML = '';
+
+                data.filter(vehicle => vehicle.status === 3)
+                    .forEach(vehicle => {
+                    const row = document.createElement("tr");
+                    row.classList.add("inboxRowClass");
+
+                    const vehicleData = `Vehicle ${vehicle._id} - Status: EMERGENCY`;
+
+                    const textCell = document.createElement("td");
+                    textCell.textContent = vehicleData;
+                    row.appendChild(textCell)
+
+                    const buttonCell = document.createElement("td");
+                    const button = document.createElement("button");
+                    button.innerText = "Acknowledge";
+                    button.id = "acknowledgeBtn";
+                    buttonCell.appendChild(button);
+
+                    row.appendChild(buttonCell);
+
+                    button.addEventListener("click", () => acknowledgeNotification(vehicle));
+
+                    inboxTable.appendChild(row);
+                    });
+
+                if (inboxTable.rows.length > 0) {
+                    inboxPopUpText.style.display = "none";
+                } else {
+                    inboxPopUpText.style.display = "block";
+                }
+                }
+            };
+
+            // Open the request and send it
+            xhr2.open("GET", "/populateVehicles", true);
+            xhr2.send();
+        }
+
+        // Call the function initially
+        // populateInboxTable();
+
+        // Poll the endpoint every second (1000 milliseconds)
+        setInterval(populateInboxTable, 1000);
+
+        function acknowledgeNotification(vehicle)
+        {
+            if(vehicle.fleetName == null)
+            {
+                vehicle.status = 4
+            }
+            else
+            {
+                vehicle.status = 1
+            }
+
+            // Send a PUT request to /editVehicle with the updated vehicle data
+            fetch(`/editVehicle`, 
+            {
+                method: "PUT",
+                headers: 
+                {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(vehicle)
+            })
+
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => console.error(error));
+        }
+
+        function inbox_appear() 
+        {
+            var inboxView = document.getElementById('inboxView');
+            inboxView.style.display = 'block';
+        }
+
+        function inbox_disappear() 
+        {
+            var inboxView = document.getElementById('inboxView');
+            inboxView.style.display = 'none';
+        }
+
+        function settings()
+        {
+            window.location.href = '/settings';
+        }
+
+    </script>
+    <div class="map-wrapper">
+        <div id='map'></div> 
+    </div>
+    
+    <button class="signout" role=button onclick="window.location.href='/logout'">Log Out</button>
+</body>
+
+<script src="../static/TrackingPage.js"></script>
+<script>
+    // Fetch the access token value and call createMap() once the value has been retrieved
+    fetch('/accessToken')
+        .then(response => response.json())
+        .then(data => createMap(data.accessToken));
+</script>

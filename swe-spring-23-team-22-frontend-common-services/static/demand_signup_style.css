@@ -1,0 +1,124 @@
+html, body {
+  font-family: "Trebuchet MS";
+  background: #395F65;
+}
+
+.titleInForm{
+  text-align: center;
+  margin: 7%;
+}
+
+.firstNameCont{
+  margin-left: 20%;
+  margin-bottom: 5%;
+}
+
+.lastNameCont{
+  margin-left: 21%;
+  margin-bottom: 5%;
+}
+
+.emailCont{
+  margin-left: 29%;
+  margin-bottom: 5%;
+}
+
+.usernameCont{
+  margin-left: 21%;
+  margin-bottom: 5%;
+}
+
+.passwordCont{
+  margin-left: 23%;
+  margin-bottom: 5%;
+}
+
+.confirmPwdCont{
+  margin-left: 7%;
+  margin-bottom: 6%;
+}
+
+
+.boxButton{
+  background: #3c6e72;
+  color: #ffffff;
+  width: 30%;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  margin-left: 35%;
+  margin-bottom: 3%;
+  padding: 1.2%;
+  border-radius: 8px; 
+  line-height: 24px;
+}
+
+.boxButton:hover {
+  background-color: green; 
+  color: white;
+  cursor: pointer;
+}
+
+.textUnderButton{
+  margin-left: 25%;
+}
+
+.showPasswordCheckbox {
+  border: 1px solid #609;
+  border-radius: 25px;
+  margin: 1.5%;
+}
+
+.textInput {
+  border-radius: 5px;
+  border: 2px solid black;
+  padding: 1.5%;
+  width: 45%;
+  height: auto;  
+}
+
+#signuptext {
+  display: block;
+}
+
+.box {
+  width: 25%;
+  padding: 2%;
+  margin: auto;
+  background: #d9d9d9;
+  border: 7px solid #284b63;
+}
+
+.title {
+  color:#ffffff;
+}
+
+#signUpPageButton{
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+#signUpPageButton:hover{
+  background-color: rgb(4, 166, 4); 
+  color: white;
+}
+
+#directLogIn{
+  border-radius: 8px; 
+  line-height: 20px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+#directLogIn:hover{
+  background-color: rgb(4, 166, 4); 
+  color: white;
+}
+
+.logo {
+  max-width: 8%;
+  max-height: 8%;
+}
+
+#togglePasswordSignUp, #togglePasswordSignUp2{
+  cursor: pointer;
+}

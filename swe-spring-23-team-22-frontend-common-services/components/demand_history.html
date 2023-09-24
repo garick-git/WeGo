@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" style="zoom: 100%">
+
+<title>WeGo History Page</title>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" type="image/x-icon" href="../static/WeGoDemandLogo.png" />
+  <link href="../static/demand_history_style.css" rel="stylesheet"  type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+</head>
+
+<body>
+  <i class="fa fa-arrow-circle-left" id = "goBackButton"></i>
+  <center>
+    <img class="logo" src="../static/WeGoDemandLogo.png" alt="WeGo_logo" style="color: #ffffff">
+    <br>
+    <h1 class="title">Your Order History</h1>
+  </center>
+ 
+  <center>
+    <div class="historyTableContainer">
+        <table id="historyTable">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Destination</th>
+              <th>Plugin Type</th>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Dynamically populated rows will be added here -->
+          </tbody>
+        </table>
+      </div>      
+  </center>
+</body>
+<button class="signout" role=button onclick="window.location.href='/logout'">Log Out</button>
+
+<script>
+    var goBackButton = document.getElementById('goBackButton');
+    goBackButton.addEventListener('click', goBack);
+    function goBack()
+    {
+      window.location.href = '/order';
+    }
+
+    function populateHistoryTable() 
+    {
+      fetch('/populateHistory')
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          const table = document.getElementById('historyTable');
+          table.innerHTML = '';
+
+          // Create table headers
+          const headers = ['Order ID', 'Destination', 'Plugin Type', 'Item', 'Quantity', 'Price', 'Status'];
+          const headerRow = document.createElement('tr');
+          for (let i = 0; i < headers.length; i++) {
+            const header = document.createElement('th');
+            header.innerText = headers[i];
+            headerRow.appendChild(header);
+          }
+          table.appendChild(headerRow);
+
+          // Save fetched orders into array
+          const orders = data;
+
+          // Sort orders by order ID in descending order
+          orders.sort((a, b) => b.orderID - a.orderID);
+
+          // Populate table rows
+          orders.forEach(order => {
+            const row = document.createElement('tr');
+
+            // Order ID column
+            const orderID = document.createElement('td');
+            orderID.innerText = order.orderID;
+            row.appendChild(orderID);
+
+            // Destination column
+            const destination = document.createElement('td');
+            destination.innerText = order.destination;
+            row.appendChild(destination);
+
+            // Plugin Type column
+            const pluginType = document.createElement('td');
+            pluginType.innerText = order.pluginType;
+            row.appendChild(pluginType);
+
+            // Item column
+            const suppliesNeeded = document.createElement('td');
+            suppliesNeeded.innerText = order.suppliesNeeded;
+            row.appendChild(suppliesNeeded);
+ 
+            // Quantity column
+            const quantity = document.createElement('td');
+            quantity.innerText = order.quantity;
+            row.appendChild(quantity);
+
+            // Price column
+            const price = document.createElement('td');
+            price.innerText = order.orderTotal;
+            row.appendChild(price);
+
+            // Status column
+            const orderStatus = document.createElement('td');
+            orderStatus.innerText = order.orderStatus;
+            row.appendChild(orderStatus);
+
+            table.appendChild(row);
+          });
+        })
+        .catch(error => console.error(error));
+    }
+
+
+    window.onload = function(){
+        populateHistoryTable()
+    }
+</script>
+</html>
